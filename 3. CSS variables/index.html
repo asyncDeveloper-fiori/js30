@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing with CSS varibales using JS</title>
+</head>
+<style>
+
+    :root {
+        --base : #f4f739;
+        --blur : 0px;
+        --size : 0px;
+    }
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body{
+        margin-top: 5%;
+        color: white;
+        background-color: rgb(42, 42, 42);
+    }
+
+    .head{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .controls{
+        margin-top: 5%;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        gap: 5%;
+    }
+
+    .imagecont{
+        margin-left: 27%;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+        margin-top: 5%;
+        /* background-color: var(--base); */
+        /* padding: var(--size); */
+    }
+
+    .image{
+        width: auto;
+        /* height: auto; */
+        background-color: var(--base);
+        /* padding: var(--size); */
+        filter: blur(var(--blur));
+        border: var(--size) solid var(--base);
+    }
+
+    .highlight{
+        color: var(--base);
+    }
+
+
+</style>
+<body>
+    <!-- page header -->
+    <div class="head">
+        <h1>
+            Playing with CSS and <span class="highlight">JS</span>
+        </h1>
+    </div>
+
+    <div class="controls">
+        <label for="size">Space</label>
+        <Input type="range" min="0" max="200" value="10" name="size" data-sizeing="px" />
+
+        <label for="blur">Blur</label>
+        <Input type="range" min="0" max="10" value="0" name="blur" data-sizeing="px" />
+
+        <label for="base">Base Colour</label>
+        <Input type="color" value="#f4f739" data-sizeing="" name="base" />
+    </div>
+
+    
+        <div class="imagecont">
+
+        <img class="image" width="50%"  src="https://images.unsplash.com/photo-1584283598336-3162a018c0b4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGxhcHRvcCUyMGFzdGhldGljfGVufDB8fDB8fHww" />
+    </div>
+</body>
+
+<script>
+
+    const inputs = document.querySelectorAll("input");
+    
+    function editData(){
+        console.log("mouse enter");
+        const suffix = this.dataset.sizeing || "";
+
+        document.documentElement.style.setProperty(`--${this.name}`, this.value+suffix);
+    }
+
+    inputs.forEach(input =>input.addEventListener("change" , editData));
+    inputs.forEach(input =>input.addEventListener("drag" , editData));
+</script>
+
+</html>
