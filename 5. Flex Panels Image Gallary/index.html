@@ -41,21 +41,28 @@
     </div>
   </body>
   <script>
+    const panels = document.querySelectorAll(".panel");
 
-    const panels = document.querySelectorAll('.panel');
-
-    function toggleOpen(){
-        this.classList.toggle('open');
+    function toggleOpen() {
+      panels.forEach((panel) => {
+        if (panel !== this) {
+          panel.classList.remove("open");
+          panel.classList.remove("open-active");
+        }
+      });
+      this.classList.toggle("open");
     }
 
-    function toggleActive(e){
-         if (e.propertyName.includes('flex') || e.propertyName.includes('flex-grow')) {
-        this.classList.toggle('open-active');
-    }
+    function toggleActive(e) {
+      if( this.classList.contains("open")){
+        if (e.propertyName.includes("flex") || e.propertyName.includes("flex-grow") 
+      ) {
+        this.classList.toggle("open-active");
+      }
+      }
     }
 
-    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
-    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
-
+    panels.forEach((panel) => panel.addEventListener("click", toggleOpen));
+    panels.forEach((panel) => panel.addEventListener("transitionend", toggleActive));
   </script>
 </html>
