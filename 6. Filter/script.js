@@ -10,7 +10,8 @@ fetch(endPoint)
   })
   .catch(error => console.error('Error fetching data:', error));
 
-  function findMatches(wordToMatch,cities){
+
+    function findMatches(wordToMatch,cities){
         return cities.filter(place =>{
             const regex = new RegExp(wordToMatch,'gi');
             return place.match(regex);
