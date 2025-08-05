@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev tools</title>
+</head>
+<body>
+        <p onclick="makegreen()">Hi</p>
+</body>
+<script>
+
+    const dogs = [{name : 'Snickers', age:2}, {name:'Hugo',age:8}];
+
+    // to put a break point on the attribute
+    // select the element right click then click break on then click attribute modification
+    const p = document.querySelector("p");
+    function makegreen(){
+        p.style.color = "green";
+        p.style.fontSize = "50px";
+    }
+
+    // interpolated console.log
+    // 2 ways using `` or using %s
+    const data = "some data"
+    console.log(`Here are ${data}`);
+    console.log('this is a %s string',"✅");
+
+    // styled console.log
+    console.log("%c Some text to be styled",'font-size: 50px; background:red; text-shadow : 10px 10px 0 blue');
+
+    // warning
+    console.warn("This is a warning");
+
+    //error
+    console.error("This is a error");
+
+    //info
+    console.info("This is a info");
+
+    //assert
+    // triggers when condition is false
+    console.assert(p.classList.contains("class1") , "This is assert");
+
+    // clear
+    // console.clear();
+
+    // view dom elements
+    console.dir(p);
+
+    //grouping
+    dogs.forEach(dog =>{
+        console.group(`${dog.name}`);
+        console.log(`This is ${dog.name} dog`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.groupEnd(`${dog.name}`);
+    });
+
+     dogs.forEach(dog =>{
+        console.groupCollapsed(`${dog.name}`);
+        console.log(`This is ${dog.name} dog`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.groupEnd(`${dog.name}`);
+    })
+
+
+    // counting
+    console.count("1");
+    console.count("1");
+    console.count("1");
+</script>
+</html>
