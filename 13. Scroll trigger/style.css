@@ -1,0 +1,25 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+}
+
+.card{
+    margin: 10% 30% 10%;
+    background: white;
+    padding: 20px;
+}
+
+.image-wrap-right {
+    float: right; 
+    margin: 0 0 15px 15px; 
+    shape-outside: margin-box; 
+}
+
+.image-wrap-left {
+    float: left; 
+    margin: 0 0 15px 15px; 
+    shape-outside: margin-box; 
+    margin-left: 2px;
+}
