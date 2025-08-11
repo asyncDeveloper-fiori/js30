@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reference vs Copy</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // copy in case of varibale and string
+    var var1 = 100;
+    var var2 = var1;
+    console.log(var1 , var2);
+    var1 = 200;
+    console.log(var1 , var2);
+    // in case of arrays
+    let players = ["Rohit" , "Virat" , "Dhoni"];
+    let team1 = players;
+    console.log(players,team1);
+    team1[0] = "Bumrah";
+    console.log(players,team1);
+    // the value is updated in both the arrays
+    // so to avoid this
+    let team2 = Array.from(players);
+    let team3 = [...players];
+    let team4 = [].concat(players);
+    // in case of objects
+    let dev = {
+        name : "sam",
+        age : 22
+    };
+    let dev1 = dev;
+    console.log(dev,dev1);
+    dev1.number = 30;
+    console.log(dev,dev1);
+    // the value is updated in both the objects
+    // so to avoid this
+    let dev2 = Object.assign({} , dev);
+    console.log(dev,dev2);
+    dev2.role = "web dev";
+    console.log(dev,dev2);
+</script>
+</html>
