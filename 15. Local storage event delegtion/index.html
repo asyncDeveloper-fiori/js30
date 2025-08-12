@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local storage and event delegation</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .wrapper{
+            border: 1px solid black;
+            padding: 5px;
+            width: 45%;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h2>LOCAL TAPAS</h2>
+        <p></p>
+        <ul class="plates">
+            <li>Loading Tapas...</li>
+        </ul>
+        <form class="add-items">
+            <input type="text" name="item" placeholder="Item Name" required>
+            <input type="submit" value="+ Add Item">
+        </form>
+    </div>
+</body>
+<script>
+    const addItems = document.querySelector(".add-items");
+    const itemList = document.querySelector(".plates");
+    const items =[];
+
+    function addItem(e){
+        e.preventDefault();
+        const text = (this.querySelector('[name=item]')).value;
+        const item = {
+            text,
+            done : false
+        };
+        items.push(item);
+        populateList(items, itemList);
+        this.reset();
+    }
+
+    function populateList(plates = [] , platesList){
+        platesList.innerHTML = plates.map((plate,i)=>{
+            return `<li>
+                <input type="checkbox" data-index=${i} id="item${i}" />
+                <label for="item${i}">${plate.text}</label>
+                </li>`;
+        }).join('');
+    }
+
+    addItems.addEventListener('submit' , addItem);
+</script>
+</html>
