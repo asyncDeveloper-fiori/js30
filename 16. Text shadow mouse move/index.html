@@ -20,7 +20,7 @@
     }
 
     h1 {
-      text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+      text-shadow: 10px 10px 0 rgb(94, 92, 92);
       font-size: 100px;
     }
   </style>
@@ -47,7 +47,7 @@
       const xWalk = Math.round((x / width * walk) - (walk / 2));
       const yWalk = Math.round((y / width * walk) - (walk / 2));
 
-      text.style.textShadow = `${xWalk}px ${yWalk}px 0 black`;
+      text.style.textShadow = `${xWalk}px ${yWalk}px 0 rgb(94, 92, 92)`;
     }
 
     hero.addEventListener("mousemove", shadow);
