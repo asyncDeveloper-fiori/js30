@@ -1,0 +1,52 @@
+# Node.js/npm dependencies
+node_modules/
+npm-debug.log
+
+# Local development files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Build directories
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+
+# Cache
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Editor files
+*.sublime-workspace
+*.sublime-project
+
+# System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Testing
+coverage/
+.nyc_output/
+
+# Package lock
+package-lock.json
+yarn.lock
+
+# OS generated files
+._*
+.Spotlight-V100
+.Trashes
+
+# Project-specific ignores
+/shutter.mp3
+/captured-photos/
+*.tmp
