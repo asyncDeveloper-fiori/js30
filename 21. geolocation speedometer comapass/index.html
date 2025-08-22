@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Speedometer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+        
+        .speed-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #00b4d8;
+            box-shadow: 0 0 20px rgba(0, 180, 216, 0.5),
+                        inset 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .speed-value {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+        
+        .speed-unit {
+            font-size: 1.5rem;
+            color: #90e0ef;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .button {
+            background: #00b4d8;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button:hover {
+            background: #0077b6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .accuracy {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #90e0ef;
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .instructions h2 {
+            margin-bottom: 10px;
+            color: #90e0ef;
+        }
+        
+        .instructions ul {
+            list-style-position: inside;
+            padding-left: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .troubleshooting {
+            color: #ff9e6b;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 500px) {
+            .speed-display {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .speed-value {
+                font-size: 3.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Device Speedometer</h1>
+        
+        <div class="speed-display">
+            <div class="speed-value" id="speedValue">0.0</div>
+            <div class="speed-unit">km/h</div>
+        </div>
+        
+        <div class="status" id="status">
+            Initializing speedometer...
+        </div>
+        
+        <div class="accuracy" id="accuracy">
+            Accuracy: Unknown
+        </div>
+        
+        <button class="button" id="startBtn">Start Tracking</button>
+        <button class="button" id="stopBtn" disabled>Stop Tracking</button>
+        
+        <div class="instructions">
+            <h2>How to use:</h2>
+            <ul>
+                <li>Click "Start Tracking" and allow location access when prompted</li>
+                <li>This works best on mobile devices with GPS</li>
+                <li>Keep the app open while moving to see speed changes</li>
+                <li>For accurate results, enable high accuracy mode in your browser</li>
+            </ul>
+            
+            <div class="troubleshooting">
+                <p>If speed stays at 0.0:</p>
+                <ul>
+                    <li>Ensure location permissions are granted</li>
+                    <li>Try moving to an area with better GPS signal</li>
+                    <li>Refresh the page and try again</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const speedValue = document.getElementById('speedValue');
+        const statusElement = document.getElementById('status');
+        const accuracyElement = document.getElementById('accuracy');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        // Variables
+        let watchId = null;
+        let lastPosition = null;
+        let lastTimestamp = null;
+        
+        // Check if geolocation is available
+        if (!navigator.geolocation) {
+            statusElement.textContent = 'Geolocation is not supported by your browser';
+            statusElement.style.color = '#ff6b6b';
+            startBtn.disabled = true;
+        }
+        
+        // Start watching position
+        startBtn.addEventListener('click', () => {
+            statusElement.textContent = 'Requesting location access...';
+            
+            navigator.geolocation.getCurrentPosition(
+                // Success callback
+                (position) => {
+                    statusElement.textContent = 'Location access granted. Tracking movement...';
+                    statusElement.style.color = '#ffffff';
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    
+                    // Start watching position with high accuracy
+                    watchId = navigator.geolocation.watchPosition(
+                        handlePositionUpdate,
+                        handleLocationError,
+                        {
+                            enableHighAccuracy: true,
+                            maximumAge: 0,
+                            timeout: 5000
+                        }
+                    );
+                    
+                    lastPosition = position;
+                    lastTimestamp = Date.now();
+                },
+                // Error callback
+                handleLocationError,
+                // Options
+                { 
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        });
+        
+        // Stop watching position
+        stopBtn.addEventListener('click', () => {
+            if (watchId !== null) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+                statusElement.textContent = 'Tracking stopped';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+        
+        function handlePositionUpdate(position) {
+            // Update accuracy information
+            accuracyElement.textContent = `Accuracy: ±${position.coords.accuracy.toFixed(1)} meters`;
+            
+            // Use the built-in speed if available
+            if (position.coords.speed !== null) {
+                const speedKmh = (position.coords.speed * 3.6).toFixed(1);
+                speedValue.textContent = speedKmh;
+                
+                // Change color based on speed
+                updateSpeedColor(speedKmh);
+                
+                statusElement.textContent = 'Tracking movement...';
+                return;
+            }
+            
+            // Calculate speed manually if not provided by the device
+            if (lastPosition && lastTimestamp) {
+                const timeDiff = (Date.now() - lastTimestamp) / 1000; // in seconds
+                if (timeDiff > 0) {
+                    // Calculate distance using Haversine formula
+                    const distance = calculateDistance(
+                        lastPosition.coords.latitude,
+                        lastPosition.coords.longitude,
+                        position.coords.latitude,
+                        position.coords.longitude
+                    );
+                    
+                    const speedMs = distance / timeDiff;
+                    const speedKmh = (speedMs * 3.6).toFixed(1);
+                    
+                    speedValue.textContent = speedKmh;
+                    updateSpeedColor(speedKmh);
+                    statusElement.textContent = 'Tracking movement...';
+                }
+            }
+            
+            lastPosition = position;
+            lastTimestamp = Date.now();
+        }
+        
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            // Haversine formula to calculate distance between two points
+            const R = 6371000; // Earth radius in meters
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+                
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+            const distance = R * c; // Distance in meters
+            
+            return distance;
+        }
+        
+        function deg2rad(deg) {
+            return deg * (Math.PI/180);
+        }
+        
+        function updateSpeedColor(speed) {
+            if (speed > 80) {
+                speedValue.style.color = '#ff6b6b';
+            } else if (speed > 40) {
+                speedValue.style.color = '#ff9e6b';
+            } else if (speed > 5) {
+                speedValue.style.color = '#90e0ef';
+            } else {
+                speedValue.style.color = '#ffffff';
+            }
+        }
+        
+        function handleLocationError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    statusElement.textContent = 'Location access denied. Please enable location permissions to use the speedometer.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    statusElement.textContent = 'Location information is unavailable. Please check your connection.';
+                    break;
+                case error.TIMEOUT:
+                    statusElement.textContent = 'Location request timed out. Please try again.';
+                    break;
+                case error.UNKNOWN_ERROR:
+                    statusElement.textContent = 'An unknown error occurred. Please refresh and try again.';
+                    break;
+            }
+            statusElement.style.color = '#ff6b6b';
+            speedValue.textContent = '0.0';
+            speedValue.style.color = '#ffffff';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
