@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Follow along links</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+    <nav>
+        <ul>
+            <li><a href="">Home</a></li>
+            <li><a href="">Order status</a></li>
+            <li><a href="">Tweets</a></li>
+            <li><a href="">Read Our History</a></li>
+            <li><a href="">Contct Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="wrpper">
+        <p>
+            Lorem ipsum dolor sit, amet <a href="">consectetur</a> adipisicing elit. Ducimus cum explicabo, voluptatibus mollitia facere velit porro sit? Aliquam dolore architecto maxime iusto vel culpa eius nisi dolorum vero nulla quam officia distinctio omnis <a href="">laborum</a>, fugiat reprehenderit non, excepturi est nostrum laboriosam eum voluptatem? Repellat, molestiae sint libero aliquid dignissimos nemo praesentium id eum magnam obcaecati dolore aut quod cum minima odio dolorum sunt voluptate? Odit voluptatum minima atque vel cumque sunt eum dolore repudiandae ad magnam tempora, ea vero, eaque consequatur consequuntur suscipit minus? <a href="">Dignissimos</a> cum, esse veritatis non alias et quas repellendus modi! Nobis atque vitae reiciendis, error assumenda quasi cum animi. Est fugiat suscipit saepe omnis similique quis et recusandae ab itaque fuga quas quibusdam reiciendis odio totam quasi, blanditiis, id deleniti! <a href="">Libero</a> numquam magni labore temporibus amet omnis fuga unde distinctio culpa ratione in, officiis quia quidem. Molestiae facere perferendis iusto eligendi harum ratione numquam maxime nobis error ea, et animi, sint, id consequatur nulla. Ullam fuga cupiditate <a href="">laborum</a> esse quam repellendus, libero fugit deleniti possimus repellat omnis ducimus voluptate impedit corrupti magnam labore! Animi, dolorum eum eius temporibus praesentium vero aperiam nulla eos fugit illum nemo blanditiis voluptates unde nostrum excepturi illo omnis eligendi ullam recusandae!
+        </p>
+    </div>
+</body>
+<script>
+    const triggers = document.querySelectorAll('a');
+    const highlight = document.createElement('span');
+    highlight.classList.add('highlight');
+    document.body.append(highlight);
+
+    function highlightLink(){
+        const linkCords = this.getBoundingClientRect();
+        console.log(linkCords);
+        highlight.style.width = `${linkCords.width}px`;
+        highlight.style.height = `${linkCords.height}px`;
+        highlight.style.transform = `translate(${linkCords.left + window.scrollX}px, ${linkCords.top + window.scrollY}px)`; 
+    }
+
+    triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+</script>
+</html>

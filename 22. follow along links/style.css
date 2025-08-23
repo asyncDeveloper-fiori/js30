@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background: rgb(39, 38, 38);
+    color: white;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+nav{
+    margin: 10px;
+    position: sticky;
+    
+}
+
+ul{
+    list-style: none;
+    display: flex;  
+    justify-content: space-around;
+    align-items: center;
+}
+
+p{
+    margin: 10px;
+    padding: 20px;
+}
+
+.highlight{
+    transition: all 0.2s;
+    border-bottom: 2px solid rgb(22, 159, 159);
+    position: absolute;
+    top: 0;
+    background: rgb(7, 81, 81);
+    left: 0;
+    z-index: -1;
+    border-radius: 20px;
+    display: block;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
