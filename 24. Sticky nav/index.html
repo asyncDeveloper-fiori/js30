@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sticky nav</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>A story about getting lost.</h1>
+    </div>
+
+    <nav class="nav" id="main">
+      <div class="logo">.LOGO</div>
+      <a href="#section1">Home</a>
+      <a href="#section2">About</a>
+      <a href="#section3">Images</a>
+      <a href="#section4">Locations</a>
+      <a href="#section5">Maps</a>
+    </nav>
+
+    <div class="content">
+      <div class="textcard">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+          voluptatem quibusdam, consectetur officiis et eaque dignissimos
+          molestias perspiciatis fugit nam nihil consequuntur sequi eum mollitia
+          voluptate dicta est quisquam sit sed suscipit repellendus. Cum fugiat
+          repellendus nobis magni et odio, modi consequuntur sit provident
+          perspiciatis libero pariatur explicabo adipisci rem perferendis sint
+          tenetur nihil, placeat vero. Sed et veritatis quae tenetur. Veritatis,
+          aperiam error? Voluptas, quidem. Cupiditate, accusantium minus
+          asperiores odit nisi, qui praesentium cumque dolorum dignissimos
+          explicabo eaque maxime labore enim architecto ullam est amet fugit
+          quod ducimus inventore. Vero aliquid distinctio consequuntur tempore
+          id sequi corporis odio saepe in molestias porro illum soluta omnis,
+          quaerat veniam illo aut voluptatibus nulla earum unde sapiente
+          consequatur adipisci reiciendis. Aliquam quibusdam illo sit quia
+          consequuntur in, iure atque impedit eos fuga consequatur vero qui?
+          Iste, illo distinctio beatae consequuntur hic vel! Impedit molestias
+          veniam numquam adipisci voluptate similique facilis vitae. Mollitia
+          voluptatum aut molestias animi error maiores, sit quaerat in
+          blanditiis reprehenderit modi deleniti. Ut veniam saepe quas labore
+          harum dignissimos pariatur totam, architecto aspernatur nam a mollitia
+          officia, rerum illum quos explicabo! Cupiditate debitis modi suscipit
+          doloribus ipsum eaque quis nam minima alias neque distinctio qui
+          dolore tempore, explicabo, fugiat ipsam? Unde non consectetur ex
+          dolore, voluptatem enim ipsa maxime nisi labore, soluta rem quisquam
+          id accusantium nemo sed expedita dolores saepe itaque eum molestiae
+          ullam adipisci blanditiis, consequatur perferendis! Commodi nobis
+          debitis magni, dicta adipisci id possimus incidunt. Rerum fuga quo
+          sapiente dolores qui corporis eveniet maxime labore dolorum
+          consequuntur at, cumque harum reiciendis? Eligendi facilis pariatur,
+          omnis quisquam nisi quibusdam, possimus mollitia maiores voluptate
+          fugit cupiditate inventore voluptatum rerum dolorum ipsa dicta
+          nesciunt? Atque, debitis necessitatibus consequuntur fuga cupiditate
+          qui praesentium non earum inventore excepturi doloribus saepe, at
+          itaque? Distinctio sint deserunt officia harum voluptate velit ea
+          laudantium praesentium! Placeat, corrupti ad ipsum reiciendis tempora
+          inventore temporibus aspernatur officia, aut iure hic architecto!
+          Commodi assumenda reiciendis ratione facere modi deleniti, perferendis
+          ab pariatur minus accusamus, necessitatibus accusantium ut veritatis
+          natus tenetur unde aperiam. Porro aspernatur beatae recusandae culpa
+          voluptates reiciendis. Nulla hic, minima recusandae maiores minus odio
+          soluta suscipit perferendis consequuntur, est sapiente, voluptatem
+          ullam repellendus. Architecto assumenda quae rerum. Veritatis a rem,
+          molestiae, expedita rerum ullam est, eveniet corporis consequuntur vel
+          officiis blanditiis dolore veniam dignissimos quae aspernatur quisquam
+          eius cumque architecto ex. Fugit officiis culpa reprehenderit vero
+          deleniti facere. Non, debitis! Ipsa atque omnis perspiciatis
+          similique! Laboriosam possimus labore animi commodi blanditiis et
+          veritatis quidem inventore mollitia porro asperiores tempore neque
+          corrupti quibusdam atque eos, sed laborum omnis earum, voluptates
+          perferendis placeat deleniti at! Ad repellendus tempore necessitatibus
+          quasi laboriosam repudiandae quisquam facilis, perspiciatis aut
+          dignissimos expedita maxime tempora placeat eos praesentium mollitia
+          impedit temporibus sequi aliquam doloremque. Delectus necessitatibus
+          quam quae veritatis voluptates iure ea molestiae. Harum, nisi omnis.
+          Neque praesentium architecto ratione, magnam similique sequi aliquid
+          ab, repellendus quae, consectetur asperiores aperiam? Saepe omnis
+          voluptatem est nihil praesentium, asperiores cum itaque quo adipisci
+          velit, nobis vitae inventore. Suscipit deserunt dignissimos
+          necessitatibus explicabo corporis repellat!
+        </p>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script>
+    const nav = document.getElementById("main");
+    const toOfNav = nav.offsetTop;
+
+    function fixNav() {
+      if (window.scrollY >= toOfNav) {
+        // document.body.style.paddingTop = nav.offsetHeight + 'px';
+        document.body.classList.add("fixed-nav");
+      } else {
+        document.body.style.paddingTop = 0;
+        document.body.classList.remove("fixed-nav");
+      }
+    }
+
+    window.addEventListener("scroll", fixNav);
+    window.addEventListener("scroll", () => {
+      if (window.scrollY >= toOfNav) {
+        gsap.to(".logo", {
+          scrollTrigger: ".logo",
+          x: 0,
+          duration: 0.5,
+          scale: 1,
+          display: 'block'
+        });
+      }
+      else{
+        gsap.to(".logo", {
+          scrollTrigger: ".logo",
+          x: -500,
+          duration: 0.5,
+          scale: 0,
+          display: 'none'
+        });
+      }
+    });
+  </script>
+</html>
