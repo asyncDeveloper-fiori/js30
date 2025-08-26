@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .one{
+            width: 100%;
+            height: 100vh;
+            background-color: rgb(247, 119, 119);
+        }
+
+        .two{
+            width: 60%;
+            height: 60vh;
+            background-color: rgb(111, 237, 111);
+            margin: auto;
+            position: relative;
+            top: 25vh
+        }
+
+        .three{
+            width: 40%;
+            height: 40vh;
+            background-color: rgb(110, 110, 232);
+            margin: auto;
+            position: relative;
+            top: 10vh
+        }
+    </style>
+</head>
+<body>
+    <div class="one">
+        <div class="two">
+            <div class="three">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    const divs = document.querySelectorAll('div');
+
+    function logClick(e){
+        console.log(this);
+        e.stopPropagation(); // this will stop the event from propagating to the parent elements
+    }
+
+    // by default capture is false but when we set it to true then the function will be called in the capturing phase only
+    // capture phase -> target phase -> bubbling phase
+    // capturing happens from the outermost element to the innermost element
+    // bubbling happens from the innermost element to the outermost element
+
+    divs.forEach(div => div.addEventListener('click', logClick,{capture: true}));
+
+    divs.forEach(div => div.addEventListener('click', logClick));
+
+    // this will make the event listener to be called only once
+    // this is useful when we want to prevent multiple clicks on a button
+    // once true is similar to removeEventListener
+    divs.forEach(div => div.addEventListener('click', logClick,{once: true}));
+    
+
+</script>
+</html>
