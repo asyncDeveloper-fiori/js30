@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Speed Controller UI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1b1b1b 0%, #2d2d2d 100%);
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 900px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #ff2058;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-size: 2.5rem;
+        }
+        
+        .wrapper {
+            position: relative;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        video {
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background: #000;
+            width: 100%;
+            max-width: 765px;
+            height: auto;
+        }
+        
+        .speed-control {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .speed-label {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #ff2058;
+        }
+        
+        .speed {
+            width: 60px;
+            height: 430px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .speed-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, #ff2058, #ff416b);
+            border-radius: 30px 30px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: height 0.1s ease;
+            user-select: none;
+        }
+        
+        .speed-markers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 0;
+            pointer-events: none;
+        }
+        
+        .marker {
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .instructions {
+            text-align: center;
+            color: #aaa;
+            font-size: 1rem;
+            max-width: 600px;
+            line-height: 1.6;
+            background: rgba(0,0,0,0.3);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .current-speed {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ff2058;
+        }
+        
+        @media (max-width: 768px) {
+            .wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .speed {
+                height: 300px;
+                width: 50px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="wrapper">
+            <video src="Tom & Jerry _ A Bit of Fresh Air! _ Classic Cartoon Compilation _ @WB Kids.mp4" loop controls></video>
+            
+            <div class="speed-control">
+                <div class="speed-label">PLAYBACK SPEED</div>
+                <div class="speed">
+                    <div class="speed-bar">1x</div>
+                    <div class="speed-markers">
+                        <div class="marker">4x</div>
+                        <div class="marker">3x</div>
+                        <div class="marker">2x</div>
+                        <div class="marker">1x</div>
+                        <div class="marker">0.4x</div>
+                    </div>
+                </div>
+                <div class="current-speed">Current Speed: 1x</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const speed = document.querySelector('.speed');
+        const bar = document.querySelector('.speed-bar');
+        const video = document.querySelector('video');
+        const currentSpeedDisplay = document.querySelector('.current-speed');
+        
+        const initialRate = 1.0;
+        const minRate = 0.4;
+        const maxRate = 4.0;
+        
+        const initialHeight = ((initialRate - minRate) / (maxRate - minRate)) * 100;
+        bar.style.height = initialHeight + '%';
+        bar.textContent = initialRate.toFixed(1) + 'x';
+        currentSpeedDisplay.textContent = `Current Speed: ${initialRate.toFixed(1)}x`;
+        
+        let isDragging = false;
+        
+        speed.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            handleSpeedControl(e);
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                handleSpeedControl(e);
+            }
+        });
+        
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+        
+        speed.addEventListener('touchstart', function(e) {
+            isDragging = true;
+            handleSpeedControl(e.touches[0]);
+        });
+        
+        document.addEventListener('touchmove', function(e) {
+            if (isDragging) {
+                handleSpeedControl(e.touches[0]);
+                e.preventDefault(); 
+            }
+        });
+        
+        document.addEventListener('touchend', function() {
+            isDragging = false;
+        });
+        
+        function handleSpeedControl(e) {
+            const rect = speed.getBoundingClientRect();
+            const y = rect.bottom - e.clientY; 
+            const percent = y / rect.height;
+            
+            const height = Math.max(0, Math.min(100, percent * 100));
+            bar.style.height = height + '%';
+            
+            const playbackRate = (percent * (maxRate - minRate)) + minRate;
+            const constrainedRate = Math.max(minRate, Math.min(maxRate, playbackRate));
+            
+            bar.textContent = constrainedRate.toFixed(1) + 'x';
+            video.playbackRate = constrainedRate;
+            currentSpeedDisplay.textContent = `Current Speed: ${constrainedRate.toFixed(1)}x`;
+        }
+        
+        speed.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
