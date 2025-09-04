@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack a mole!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            text-align: center;
+            color: #FF5722;
+            text-shadow: 2px 2px 0 #FFCCBC, 4px 4px 0 rgba(0,0,0,0.15);
+        }
+
+        .score {
+            background-color: #FF9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 2.2rem;
+            margin-left: 10px;
+            box-shadow: 0 4px 0 #E65100;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+            box-shadow: 0 6px 0 #2E7D32;
+            transition: all 0.1s;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background-color: #388E3C;
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #2E7D32;
+        }
+
+        button:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #2E7D32;
+        }
+
+        .game {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hole {
+            width: 150px;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+
+        .hole:after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 60px;
+            background: #8B4513;
+            border-radius: 50%;
+            bottom: -30px;
+            left: 0;
+            z-index: 1;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.3) inset;
+        }
+
+        .mole {
+            position: absolute;
+            width: 120px;
+            height: 110px;
+            top: 100%;
+            left: 15px;
+            background: #795548;
+            border-radius: 50% 50% 40% 40%;
+            transition: all 0.3s ease;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .mole:before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 50px;
+            background: #795548;
+            border-radius: 50%;
+            top: -25px;
+            left: 30px;
+        }
+
+        .mole:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background: #FF5722;
+            border-radius: 50%;
+            top: -15px;
+            left: 50px;
+        }
+
+        .mole .eye {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: black;
+            border-radius: 50%;
+            top: 25px;
+        }
+
+        .mole .eye.left {
+            left: 25px;
+        }
+
+        .mole .eye.right {
+            right: 25px;
+        }
+
+        .mole .nose {
+            position: absolute;
+            width: 25px;
+            height: 15px;
+            background: #FF5722;
+            border-radius: 50%;
+            top: 45px;
+            left: 47px;
+        }
+
+        .hole.up .mole {
+            top: 10px;
+        }
+        .mole.hit {
+            background: #FF5722;
+            transform: scale(0.9);
+        }
+
+        .mole.hit:before {
+            background: #FF5722;
+        }
+
+        @media (max-width: 600px) {
+            .game {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .hole {
+                width: 130px;
+                height: 110px;
+            }
+            
+            .hole:after {
+                width: 130px;
+            }
+            
+            .mole {
+                width: 100px;
+                left: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .score {
+                font-size: 1.8rem;
+            }
+        }
+
+        .instructions {
+            margin-top: 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+
+        .instructions h2 {
+            color: #FF5722;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Whack-a-mole! <span class="score">0</span></h1>
+    <button onclick="startGame()">Start!</button>
+    <div class="game">
+        <div class="hole hole1">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+
+        <div class="hole hole2">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+
+        <div class="hole hole3">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+
+        <div class="hole hole4">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+
+        <div class="hole hole5">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+
+        <div class="hole hole6">
+            <div class="mole">
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+                <div class="nose"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="instructions">
+        <h2>How to Play</h2>
+        <p>Click the Start button to begin. Whack as many moles as you can in 10 seconds!</p>
+    </div>
+</body>
+<script>
+    const holes = document.querySelectorAll('.hole');
+    const scoreBoard = document.querySelector('.score');
+    const moles = document.querySelectorAll('.mole');
+    let lastHole;
+    let timeUp = false;
+    let score = 0;
+
+    function randTime(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
+    }
+
+    function randomHole(holes) {
+        const idx = Math.floor(Math.random() * holes.length);
+        const hole = holes[idx];
+        if(hole === lastHole) {
+            console.log('Same hole');
+            return randomHole(holes);
+        }
+        lastHole = hole;
+        return hole;
+    }
+
+    function peep() {
+        const time = randTime(200, 1000);
+        const hole = randomHole(holes);
+        hole.classList.add('up');
+        setTimeout(() => {
+            hole.classList.remove('up');
+            if(!timeUp) peep();
+        }, time);
+    }
+
+    function startGame() {
+        scoreBoard.textContent = 0;
+        timeUp = false;
+        score = 0;
+        peep();
+        setTimeout(() => timeUp = true, 10000);
+    }
+
+    function bonk(e) {
+        if(!e.isTrusted) return; 
+        score++;
+        this.classList.add('hit');
+        setTimeout(() => {
+            this.classList.remove('hit');
+        }, 300);
+        this.parentNode.classList.remove('up');
+        scoreBoard.textContent = score;
+    }
+
+    moles.forEach(mole => mole.addEventListener('click', bonk));
+</script>
+</html>
